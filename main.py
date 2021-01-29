@@ -1,16 +1,32 @@
+'''Main Entry Point for the Program'''
+
 import pygame
-from events.eventlogic import process_event
-from entities.data import get_all_entities
-from entities.graphics import draw_frame
+import components
+from components import views
 
 pygame.init()
 
-screen = pygame.display.set_mode([500, 500])
+screen = pygame.display.set_mode([400, 400])
+
+clock = pygame.time.Clock()
 
 RUNNING = True
+
+title_screen = views.TitleScreen()
+components.root.assign_to(title_screen)
+
 while RUNNING:
     for event in pygame.event.get():
-        process_event(event)
 
-    for entity in get_all_entities():
-        draw_frame(entity)
+        if event.type == pygame.QUIT:
+            RUNNING = False
+        
+        components.root.get().update(event) # will update all child components of the root component
+        components.root.get().draw() # will draw this component and all its children
+        
+
+    # keeps the framerate from going to high (but not too low, low depends on our code)
+    clock.tick(60)
+    
+    # displays all the graphical updates that have been made.
+    pygame.display.flip()
