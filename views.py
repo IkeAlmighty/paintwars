@@ -1,19 +1,20 @@
 '''Contains all the different root views to be used in the game.'''
 
 import pygame
-from .button import Button
-from .root import Component
-from . import colors
+from engine.components.button import Button
+from engine.components.root import Component
+from engine.components import colors
 
 class TitleScreen(Component):
     
     def __init__(self):
-        super().__init__()
-        exit_button = Button('Exit to Desktop')
+        super().__init__(pygame.display.get_surface().get_rect())
+        exit_button = Button('Exit to Desktop', 100, 100)
         exit_button.on_event(pygame.MOUSEBUTTONUP, self.close)
-        self.add_child(exit_button)
+        self.add_subcomponent(exit_button)
+        self.on_draw(self.draw)
     
-    def draw(self):
+    def draw(self, screen):
         screen = pygame.display.get_surface()
         font = pygame.font.SysFont(None, 24)
         img = font.render('PAINT WARS', True, colors.HEADER)
