@@ -1,6 +1,7 @@
 '''An all purpose button for for the game!'''
 import pygame
 from . import colors
+from . import events
 from .root import Component
 
 
@@ -26,6 +27,9 @@ class Button(Component):
         # adding event handlers:
         self.on_event(pygame.MOUSEBUTTONDOWN, self.mouse_down)
         self.on_event(pygame.MOUSEBUTTONUP, self.mouse_up)
+        
+        # TODO: This doesn't work
+        self.on_event(events.MouseOutEvent.type, self.mouse_out)
 
     def draw(self, screen):
         # draw the backgroud of the button:
@@ -48,3 +52,7 @@ class Button(Component):
     
     def mouse_up(self, event):
         self.on_draw(self.draw)
+
+    def mouse_out(self, event):
+        self.on_draw(self.draw)
+        print('MOUSE OUT')

@@ -4,6 +4,7 @@ is drawn by the main game loop
 '''
 
 import pygame
+from . import events
 
 _root_component = None
 
@@ -31,7 +32,7 @@ class Component:
         self.event_callbacks = {}
         self.draw_function = lambda: None
         self.rect = rect
-        self.event_history = [None, None, None, None, None]
+        self.event_history = []
 
     def add_subcomponent(self, component):
         '''
@@ -56,8 +57,16 @@ class Component:
             for function in self.event_callbacks[event.type]:
                 function(event)
                 
-        self.event_history.append(event)
-        self.event_history.pop(0)
+        if self.rect.collidepoint(x, y):
+            self.event_history.append(event)
+        
+        if len(self.event_history) > 1:
+            self.event_history.pop(0)
+        
+        for e in self.event_history:
+            if e.type == pygame.MOUSEMOTION and event.type == pygame.MOUSEMOTION and not self.rect.collidepoint(x, y):
+                pygame.event.post(events.MouseOutEvent)
+                self.event_history = [events.MouseOutEvent]
                 
         for subcomponent in self._subcomponents:
             subcomponent.recursive_update(event)

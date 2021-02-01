@@ -7,7 +7,7 @@ def start(resolution, root_component_class, fullscreen=False):
     pygame.init()
     
     if fullscreen:
-       pygame.display.set_mode(resolution, flags=pygame.FULLSCREEN)
+        pygame.display.set_mode(resolution, flags=pygame.FULLSCREEN)
     else:
         pygame.display.set_mode(resolution)
     
