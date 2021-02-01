@@ -4,7 +4,7 @@ is drawn by the main game loop
 '''
 
 import pygame
-from . import events
+from . import event as event_manager
 
 _root_component = None
 
@@ -61,7 +61,7 @@ class Component:
             self.last_event = event
         
         if self.last_event and self.last_event.type == pygame.MOUSEMOTION and not self.rect.collidepoint(x, y):
-            pygame.event.post(events.MouseOutEvent)
+            event_manager.post(event_manager.MouseOutEvent)
             self.last_event = None
                 
         for subcomponent in self._subcomponents:

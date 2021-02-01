@@ -1,7 +1,7 @@
 '''An all purpose button for for the game!'''
 import pygame
 from . import colors
-from . import events
+from . import event as event_manager
 from .root import Component
 
 
@@ -22,16 +22,15 @@ class Button(Component):
         self.rect = pygame.Rect(x, y, text_width + 10, text_height + 10)
         
         # setting the base draw function:
-        self.on_draw(self.draw)
+        self.on_draw(self.draw_base)
         
         # adding event handlers:
         self.on_event(pygame.MOUSEBUTTONDOWN, self.mouse_down)
         self.on_event(pygame.MOUSEBUTTONUP, self.mouse_up)
-        
-        # TODO: This doesn't work
-        self.on_event(events.MouseOutEvent.type, self.mouse_out)
+        self.on_event(pygame.MOUSEMOTION, self.mouse_motion)
+        self.on_event(event_manager.MouseOutEvent, self.mouse_out)
 
-    def draw(self, screen):
+    def draw_base(self, screen):
         # draw the backgroud of the button:
         pygame.draw.rect(screen, colors.FOREGROUND, self.rect)
 
@@ -39,7 +38,7 @@ class Button(Component):
         x, y = self.rect.topleft
         screen.blit(self.text_img, (x + 5, y + 5))
         
-    def draw_mousedown(self, screen):
+    def draw_animated(self, screen):
         # draw the background of the button:
         pygame.draw.rect(screen, colors.SELECTED, self.rect)
 
@@ -48,11 +47,13 @@ class Button(Component):
         screen.blit(self.text_img, (x + 5, y + 5))
         
     def mouse_down(self, event):
-        self.on_draw(self.draw_mousedown)
+        self.on_draw(self.draw_animated)
     
     def mouse_up(self, event):
-        self.on_draw(self.draw)
-
+        self.on_draw(self.draw_base)
+        
+    def mouse_motion(self, event):
+        self.on_draw(self.draw_animated)
+        
     def mouse_out(self, event):
-        self.on_draw(self.draw)
-        print('MOUSE OUT')
+        self.on_draw(self.draw_base)

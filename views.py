@@ -7,11 +7,12 @@ from engine.components import colors
 
 class TitleScreen(Component):
     
-    def __init__(self):
+    def __init__(self, *args):
         super().__init__(pygame.display.get_surface().get_rect())
-        exit_button = Button('Exit to Desktop', 100, 100)
-        exit_button.on_event(pygame.MOUSEBUTTONUP, self.close)
-        self.add_subcomponent(exit_button)
+        
+        for subcomponent in args:
+            self.add_subcomponent(subcomponent)
+            
         self.on_draw(self.draw)
     
     def draw(self, screen):
@@ -19,7 +20,4 @@ class TitleScreen(Component):
         font = pygame.font.SysFont(None, 24)
         img = font.render('PAINT WARS', True, colors.HEADER)
         screen.blit(img, (screen.get_width()//2 - img.get_width()//2, 40))
-    
-    def close(self, event):
-        pygame.event.post(pygame.event.Event(pygame.QUIT))
         
