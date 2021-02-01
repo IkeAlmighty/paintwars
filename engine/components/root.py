@@ -31,11 +31,12 @@ class Component:
         self.event_callbacks = {}
         self.draw_function = lambda: None
         self.rect = rect
+        self.event_history = [None, None, None, None, None]
 
     def add_subcomponent(self, component):
         '''
-        Add a subcomponent component to this component. When this 
-        component's update and draw function is called, it 
+        Add a subcomponent component to this component. When this
+        component's update and draw function is called, it
         will call its subcomponents as well.
         '''
         self._subcomponents.append(component)
@@ -54,6 +55,9 @@ class Component:
         if self.event_callbacks.get(event.type) and self.rect.collidepoint(x, y):
             for function in self.event_callbacks[event.type]:
                 function(event)
+                
+        self.event_history.append(event)
+        self.event_history.pop(0)
                 
         for subcomponent in self._subcomponents:
             subcomponent.recursive_update(event)
