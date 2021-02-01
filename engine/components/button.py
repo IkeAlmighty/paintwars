@@ -9,7 +9,7 @@ class Button(Component):
     '''An all purpose button for for the game!'''
 
     def __init__(self, text, x, y):
-        # the rect for Button is set to 0s initially, and then 
+        # the rect for Button is set to 0s initially, and then
         # reassigned in this constructor, the new values based
         # on the text render size.
         super().__init__(pygame.Rect(0, 0, 0, 0)) 

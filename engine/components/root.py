@@ -32,7 +32,7 @@ class Component:
         self.event_callbacks = {}
         self.draw_function = lambda: None
         self.rect = rect
-        self.event_history = []
+        self.last_event = None
 
     def add_subcomponent(self, component):
         '''
@@ -58,15 +58,11 @@ class Component:
                 function(event)
                 
         if self.rect.collidepoint(x, y):
-            self.event_history.append(event)
+            self.last_event = event
         
-        if len(self.event_history) > 1:
-            self.event_history.pop(0)
-        
-        for e in self.event_history:
-            if e.type == pygame.MOUSEMOTION and event.type == pygame.MOUSEMOTION and not self.rect.collidepoint(x, y):
-                pygame.event.post(events.MouseOutEvent)
-                self.event_history = [events.MouseOutEvent]
+        if self.last_event and self.last_event.type == pygame.MOUSEMOTION and not self.rect.collidepoint(x, y):
+            pygame.event.post(events.MouseOutEvent)
+            self.last_event = None
                 
         for subcomponent in self._subcomponents:
             subcomponent.recursive_update(event)
