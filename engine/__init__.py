@@ -1,7 +1,6 @@
 '''module for starting the game'''
 
 import pygame
-from . import components
 
 def init(resolution, fullscreen=False):
     pygame.init()
@@ -11,9 +10,9 @@ def init(resolution, fullscreen=False):
     else:
         pygame.display.set_mode(resolution)
 
-def start_game(root_component):
+def start_game():
     
-    components.root.assign_to(root_component)
+    # components.root.assign_to(root_component)
     
     clock = pygame.time.Clock()
     while True:
@@ -22,8 +21,7 @@ def start_game(root_component):
             if event.type == pygame.QUIT:
                 return
             
-            components.root.get().recursive_update(event)
-            components.root.get().recursive_draw()
+            print(event)
             
 
         # keeps the framerate from going to high (but not too low, low depends on our code)
