@@ -11,6 +11,7 @@ class Entity(ABC):
         
     def do_draw_method(self):
         self._draw_method(pygame.display.get_surface())
+        
     
 
 class ComponentEntity(Entity, ABC): pass

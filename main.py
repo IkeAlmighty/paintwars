@@ -1,42 +1,15 @@
 import pygame
 import engine
-from engine.event import EventListener
-from engine.entity import ComponentEntity
+from engine.event import EventManager
+from engine.ui import Button
 
 engine.init([500, 500])
-
-# exit_button = engine.ui.Button('EXIT!', 100, 100)
-
-# engine.start_game(views.TitleScreen(
-#     exit_button
-# ))
-
-from engine.event import EventManager
-
 event_manager = EventManager()
+        
+exit_button = Button("Exit To Desktop", (100, 100))
+exit_button.on_click(lambda e: pygame.event.post(pygame.event.Event(pygame.QUIT)))
 
-class Button(EventListener, ComponentEntity):
-    
-    def __init__(self, rect):
-        super().__init__()
-        self.text = "MY BUTTON"
-        self.set_draw_method(self.draw)
-        self.rect = rect
-        self.color = (100, 100, 100)
-        
-    def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.rect)
-    
-    def on_mouse_motion(self, event):
-        x, y = event.pos
-        
-        if self.rect.collidepoint(x, y):
-            self.color = (0, 0, 200)
-        else: 
-            self.color = (100, 100, 100)
-        
-b = Button(pygame.Rect(100, 100, 100, 50))
-event_manager.add_listener(b, pygame.MOUSEMOTION)
+event_manager.add_listener(exit_button, pygame.MOUSEMOTION)
 
-engine.draw_queue().add_entity(b)
+engine.draw_queue().add_entity(exit_button)
 engine.start_game(event_manager)

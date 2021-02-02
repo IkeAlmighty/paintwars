@@ -14,8 +14,7 @@ def camel_to_snake(name: str):
 class EventManager():
     '''
     Provides a concrete class for objects to register themselves as listeners
-    to, so that they can easily execute code on pygame events. This class would
-    be considered the 'Subject' in the Observer design pattern.
+    to, so that they can easily execute code on pygame events.
     '''
     
     def __init__(self):
@@ -40,16 +39,32 @@ class EventManager():
 
 class EventListener:
     
+    def __init__(self):
+        self.custom_event_functions = {}
+    
+    def on_event(self, event_type, function):
+        if not self.custom_event_functions.get(event_type):
+            self.custom_event_functions[event_type] = []
+            
+        self.custom_event_functions[event_type].append(function)
+    
     def do_event(self, event):
         '''
         Calls the corresponding on_<event_snake_case>(event)
         method in this listener, if such a method has been
-        implemented.
+        implemented. Also calls all custom named functions
+        added via on_event(event, function) method.
         '''
+        # call default-named functions if they exist:
         event_name_snake_case = camel_to_snake(pygame.event.event_name(event.type))
         for member in dir(self):
             if member == "on_{}".format(event_name_snake_case):
                 attr = getattr(self, member)
                 attr(event)
+                
+        # Call custom-named functions:
+        if self.custom_event_functions.get(event.type):
+            for function in self.custom_event_functions[event.type]:
+                function(event)
             
             
