@@ -2,6 +2,27 @@
 
 import pygame
 
+_draw_queue = None
+
+def draw_queue():
+    global _draw_queue
+    if _draw_queue == None:
+        _draw_queue = _DrawQueue()
+        
+    return _draw_queue
+
+class _DrawQueue:
+    
+    def __init__(self):
+        self._queue = []
+    
+    def add_entity(self, entity):
+        self._queue.append(entity)
+        
+    def draw_all(self):
+        for entity in self._queue:
+            entity.do_draw_method()
+
 def init(resolution, fullscreen=False):
     pygame.init()
     
@@ -10,9 +31,7 @@ def init(resolution, fullscreen=False):
     else:
         pygame.display.set_mode(resolution)
 
-def start_game():
-    
-    # components.root.assign_to(root_component)
+def start_game(event_manager):
     
     clock = pygame.time.Clock()
     while True:
@@ -21,7 +40,8 @@ def start_game():
             if event.type == pygame.QUIT:
                 return
             
-            print(event)
+            event_manager.notify(event)
+            draw_queue().draw_all()
             
 
         # keeps the framerate from going to high (but not too low, low depends on our code)
