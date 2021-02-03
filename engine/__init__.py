@@ -5,10 +5,10 @@ import pygame
 from .event import EventListener
 from .entity import Entity
 
-class _Cursor (Entity):    
+class _Cursor (Entity):
     
     def __init__(self):
-        super().__init__()
+        Entity.__init__(self, pygame.rect.Rect(0, 0, 0, 0))
         self.image = None
         self.set_draw_method(self._draw)
     
@@ -21,10 +21,13 @@ class _Cursor (Entity):
             pygame.mouse.set_visible(False)
             self.image = pygame.image.load(filepath)
             self.image = pygame.transform.scale(self.image, (25, 25))
+            self.rect = self.image.get_rect()
+            print(self.rect)
         
     def _draw(self, screen):
-        if self.image or not pygame.mouse.get_visible():
-            screen.blit(self.image, pygame.mouse.get_pos())
+        if self.image:
+            self.rect.topleft = pygame.mouse.get_pos()
+            screen.blit(self.image, self.rect.topleft)
         
 cursor = _Cursor()
 
@@ -57,6 +60,8 @@ def start_game(event_manager):
     
     clock = pygame.time.Clock()
     while True:
+        
+        # process events and draws:
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:

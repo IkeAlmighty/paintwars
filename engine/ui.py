@@ -7,17 +7,18 @@ import pygame
 from .event import EventListener
 from .entity import ComponentEntity
 
-class Button(EventListener, ComponentEntity):
+class Button(ComponentEntity, EventListener):
     '''
     Basic Button Class for creating simple text buttons
     '''
     
     def __init__(self, text, pos):
-        super().__init__()
+        ComponentEntity.__init__(self, pygame.rect.Rect(0, 0, 0, 0))
+        EventListener.__init__(self)
         self.text = text
         
         # used to track click events
-        self.click_down = False 
+        self.click_down = False
         self.on_click_functions = []
         
         # create the text image:
@@ -78,7 +79,8 @@ class Button(EventListener, ComponentEntity):
 class Label(ComponentEntity, EventListener):
     
     def __init__(self, text, color, pos):
-        super().__init__()
+        ComponentEntity.__init__(self, pygame.Rect(0, 0, 0, 0))
+        EventListener.__init__(self)
         self.text = text
         
         # create the text image:
