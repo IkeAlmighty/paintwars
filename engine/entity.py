@@ -47,7 +47,16 @@ class EntityDrawManager:
                 self._register_entity_collisions(entity)
                 
             self._queue.append(entity)
-        
+    
+    def remove_entity(self, *args):
+        for entity in args:
+            self._collision_map.pop(entity, None)
+            for key_entity in self._collision_map.keys():
+                if entity in self._collision_map[key_entity]:
+                    self._collision_map[key_entity].remove(entity)
+            
+            self._queue.remove(entity)
+                        
     def draw_all(self):
         redraw_queue = []
         for entity in self._queue:
