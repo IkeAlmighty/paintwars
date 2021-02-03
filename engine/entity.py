@@ -7,6 +7,7 @@ class Entity(ABC):
         self._draw_method = lambda: None
         self.rect = rect
         self.last_draw_rect = None
+        self._visible = True
 
     def set_draw_method(self, method):
         self._draw_method = method
@@ -15,6 +16,12 @@ class Entity(ABC):
         screen = pygame.display.get_surface()
         self._draw_method(screen)
         self.last_draw_rect = self.rect.copy()
+        
+    def set_visible(self, visible):
+        self._visible = visible
+    
+    def get_visible(self):
+         return self._visible
 
 
 class ComponentEntity(Entity, ABC):
@@ -65,7 +72,8 @@ class EntityDrawManager:
                 self._collision_map[collision].remove(entity)
             
             # add this entity to the end of the redraw queue:
-            redraw_queue.append(entity)
+            if entity.get_visible():
+                redraw_queue.append(entity)
             
         # redraw everything added to the redraw queue
         # (this will include all of the initial _queue entities + their collisions):

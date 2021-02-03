@@ -30,11 +30,12 @@ class EventManager():
             for listener in event_type:
                 listener.do_event(event)
         
-    def add_listener(self, listener, event_type):
-        if not self.listeners.get(event_type):
-            self.listeners[event_type] = []
-            
-        self.listeners[event_type].append(listener)
+    def add_listener(self, listener, *event_types):
+        for event_type in event_types:
+            if not self.listeners.get(event_type):
+                self.listeners[event_type] = []
+                
+            self.listeners[event_type].append(listener)
         
 
 class EventListener:

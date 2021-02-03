@@ -16,6 +16,7 @@ def init(resolution, fullscreen=False):
 def start_game(event_manager):
     
     draw_queue.add_entity(cursor)
+    event_manager.add_listener(cursor, pygame.WINDOWLEAVE, pygame.WINDOWENTER)
     
     clock = pygame.time.Clock()
     while True:
@@ -41,6 +42,7 @@ class _Cursor (Entity, EventListener):
     
     def __init__(self):
         Entity.__init__(self, pygame.rect.Rect(0, 0, 0, 0))
+        EventListener.__init__(self)
         self.image = None
         self.set_draw_method(self._draw)
     
@@ -63,6 +65,12 @@ class _Cursor (Entity, EventListener):
             y -= 5
             self.rect.topleft = (x, y)
             screen.blit(self.image, self.rect.topleft)
+    
+    def on_window_leave(self, event):
+        self.set_visible(False)
+        
+    def on_window_enter(self, event):
+        self.set_visible(True)
             
 cursor = _Cursor()
 draw_queue = EntityDrawManager()
