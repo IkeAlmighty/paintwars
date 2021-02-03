@@ -1,7 +1,5 @@
 from abc import ABC
-import os
 import pygame
-
 
 class Entity(ABC):
 
@@ -74,27 +72,3 @@ class EntityDrawManager:
         # print('redraw queue:', redraw_queue)
         for entity in redraw_queue:
             entity.do_draw_method()
-            
-class Cursor (Entity):
-    
-    def __init__(self):
-        Entity.__init__(self, pygame.rect.Rect(0, 0, 0, 0))
-        self.image = None
-        self.set_draw_method(self._draw)
-    
-    def set_image(self, filename):
-        if filename is None: 
-            pygame.mouse.set_visible(True)
-            self.image = None
-        else:
-            filepath = os.path.abspath('assets/images/cursors/{}'.format(filename))
-            pygame.mouse.set_visible(False)
-            self.image = pygame.image.load(filepath)
-            self.image = pygame.transform.scale(self.image, (25, 25))
-            self.rect = self.image.get_rect()
-            print(self.rect)
-        
-    def _draw(self, screen):
-        if self.image:
-            self.rect.topleft = pygame.mouse.get_pos()
-            screen.blit(self.image, self.rect.topleft)
