@@ -56,7 +56,6 @@ class _Cursor (Entity, EventListener):
             self.image = pygame.image.load(filepath)
             self.image = pygame.transform.scale(self.image, (25, 25))
             self.rect = self.image.get_rect()
-            print(self.rect)
         
     def _draw(self, screen):
         if self.image:

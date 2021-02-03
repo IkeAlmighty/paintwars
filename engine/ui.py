@@ -5,15 +5,15 @@ Contains common User Interface Classes.
 import os
 import pygame
 from .event import EventListener
-from .entity import ComponentEntity
+from .entity import Entity
 
-class Button(ComponentEntity, EventListener):
+class Button(Entity, EventListener):
     '''
     Basic Button Class for creating simple text buttons
     '''
     
     def __init__(self, text, pos):
-        ComponentEntity.__init__(self, pygame.rect.Rect(0, 0, 0, 0))
+        Entity.__init__(self, pygame.rect.Rect(0, 0, 0, 0))
         EventListener.__init__(self)
         self.text = text
         
@@ -76,10 +76,10 @@ class Button(ComponentEntity, EventListener):
         self.on_click_functions.append(function)
         
         
-class Label(ComponentEntity, EventListener):
+class Label(Entity, EventListener):
     
     def __init__(self, text, color, pos):
-        ComponentEntity.__init__(self, pygame.Rect(0, 0, 0, 0))
+        Entity.__init__(self, pygame.Rect(0, 0, 0, 0))
         EventListener.__init__(self)
         self.text = text
         
