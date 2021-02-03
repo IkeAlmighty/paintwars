@@ -1,50 +1,12 @@
 '''module for starting the game'''
 
-import os
 import pygame
 from .event import EventListener
-from .entity import Entity
+from .entity import Entity, EntityDrawManager, Cursor
+        
+cursor = Cursor()
 
-class _Cursor (Entity):
-    
-    def __init__(self):
-        Entity.__init__(self, pygame.rect.Rect(0, 0, 0, 0))
-        self.image = None
-        self.set_draw_method(self._draw)
-    
-    def set_image(self, filename):
-        if filename is None: 
-            pygame.mouse.set_visible(True)
-            self.image = None
-        else:
-            filepath = os.path.abspath('assets/images/cursors/{}'.format(filename))
-            pygame.mouse.set_visible(False)
-            self.image = pygame.image.load(filepath)
-            self.image = pygame.transform.scale(self.image, (25, 25))
-            self.rect = self.image.get_rect()
-            print(self.rect)
-        
-    def _draw(self, screen):
-        if self.image:
-            self.rect.topleft = pygame.mouse.get_pos()
-            screen.blit(self.image, self.rect.topleft)
-        
-cursor = _Cursor()
-
-class _DrawQueue:
-    
-    def __init__(self):
-        self._queue = []
-    
-    def add_entity(self, *args):
-        for entity in args:
-            self._queue.append(entity)
-        
-    def draw_all(self):
-        for entity in self._queue:
-            entity.do_draw_method()
-            
-draw_queue = _DrawQueue()
+draw_queue = EntityDrawManager()
 
 def init(resolution, fullscreen=False):
     pygame.init()

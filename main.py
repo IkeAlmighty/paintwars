@@ -3,7 +3,7 @@ import engine
 from engine.event import EventManager
 from engine.ui import Button, Label
 
-engine.init([1000, 900])
+engine.init([500, 500])
 event_manager = EventManager()
         
 exit_button = Button("Exit To Desktop", (100, 100))
@@ -18,4 +18,4 @@ engine.draw_queue.add_entity(
     header
     )
 engine.cursor.set_image('pointer.png')
-engine.start_game(event_manager) #should always be called last:
+engine.start_game(event_manager) # should always be called last, as it loops until exit
