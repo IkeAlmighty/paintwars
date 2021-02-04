@@ -2,7 +2,7 @@
 
 import os
 import pygame
-from .event import EventListener
+from .event import EventListener, EventManager
 from .entity import Entity, EntityDrawManager
 
 def init(resolution, fullscreen=False):
@@ -13,7 +13,7 @@ def init(resolution, fullscreen=False):
     else:
         pygame.display.set_mode(resolution)
 
-def start_game(event_manager):
+def start_game():
     
     draw_queue.add_entity(cursor)
     event_manager.add_listener(cursor, pygame.WINDOWLEAVE, pygame.WINDOWENTER)
@@ -73,3 +73,4 @@ class _Cursor (Entity, EventListener):
             
 cursor = _Cursor()
 draw_queue = EntityDrawManager()
+event_manager = EventManager()

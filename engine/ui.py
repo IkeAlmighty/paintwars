@@ -4,6 +4,7 @@ Contains common User Interface Classes.
 
 import os
 import pygame
+from . import event_manager
 from .event import EventListener
 from .entity import Entity
 
@@ -11,6 +12,8 @@ class Button(Entity, EventListener):
     '''
     Basic Button Class for creating simple text buttons
     '''
+    
+    # class ButtonAnimator(EventListener):
     
     def __init__(self, text, pos):
         Entity.__init__(self, pygame.rect.Rect(0, 0, 0, 0))
@@ -31,13 +34,26 @@ class Button(Entity, EventListener):
         
         self.set_draw_method(self._draw)
         
+        # map animation and click functions with Entity.on_event
+        self.on_event(pygame.MOUSEMOTION, self.do_mouse_motion)
+        self.on_event(pygame.MOUSEBUTTONUP, self.do_mouse_button_up)
+        self.on_event(pygame.MOUSEBUTTONDOWN, self.do_mouse_button_down)
+        
+        # register self with engine's main EventManager
+        event_manager.add_listener(
+            self,
+            pygame.MOUSEMOTION,
+            pygame.MOUSEBUTTONDOWN,
+            pygame.MOUSEBUTTONUP
+        )
+        
     def _draw(self, screen):
         '''default draw method'''
         pygame.draw.rect(screen, self.color, self.rect)
         x, y = self.rect.topleft
         screen.blit(self.image, (x + 5, y + 5))
     
-    def on_mouse_motion(self, event):
+    def do_mouse_motion(self, event):
         x, y = event.pos
         
         if self.rect.collidepoint(x, y):
@@ -45,14 +61,14 @@ class Button(Entity, EventListener):
         else: 
             self.color = (100, 100, 100)
             
-    def on_mouse_button_down(self, event):
+    def do_mouse_button_down(self, event):
         x, y = event.pos
         if self.rect.collidepoint(x, y):
             self.click_down = True
             
             self.color = (200, 100, 100)
             
-    def on_mouse_button_up(self, event):
+    def do_mouse_button_up(self, event):
         x, y = event.pos
         if self.rect.collidepoint(x, y):
             # call all on_click functions:
@@ -72,7 +88,6 @@ class Button(Entity, EventListener):
         manager via manager.add_listener(button_name)
         for this function to work.
         '''
-        
         self.on_click_functions.append(function)
         
         
