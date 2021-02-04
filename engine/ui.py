@@ -13,8 +13,6 @@ class Button(Entity, EventListener):
     Basic Button Class for creating simple text buttons
     '''
     
-    # class ButtonAnimator(EventListener):
-    
     def __init__(self, text, pos):
         Entity.__init__(self, pygame.rect.Rect(0, 0, 0, 0))
         EventListener.__init__(self)
