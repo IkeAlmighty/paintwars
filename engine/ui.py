@@ -4,7 +4,7 @@ Contains common User Interface Classes.
 
 import os
 import pygame
-from . import event_manager
+from . import event_manager, _color_scheme
 from .event import EventListener
 from .entity import Entity
 

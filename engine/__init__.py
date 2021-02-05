@@ -1,17 +1,26 @@
 '''module for starting the game'''
 
 import os
+import sys
 import pygame
 from .event import EventListener, EventManager
 from .entity import Entity, EntityDrawManager
+from . import defaultcolors
 
-def init(resolution, fullscreen=False):
+def init(resolution, fullscreen=False, color_scheme=None):
     pygame.init()
     
     if fullscreen:
         pygame.display.set_mode(resolution, flags=pygame.FULLSCREEN)
     else:
         pygame.display.set_mode(resolution)
+    
+    # override default colors module if a color
+    # scheme is passed in:
+    if color_scheme:
+        _color_scheme = color_scheme
+    
+        
 
 def start_game():
     
@@ -35,8 +44,6 @@ def start_game():
         
         # displays all the graphical updates that have been made.
         pygame.display.flip()
-
-
 
 class _Cursor (Entity, EventListener):
     
@@ -70,7 +77,11 @@ class _Cursor (Entity, EventListener):
         
     def on_window_enter(self, event):
         self.set_visible(True)
-            
+
+# globals:
 cursor = _Cursor()
 draw_queue = EntityDrawManager()
 event_manager = EventManager()
+
+# package private globals:
+_color_scheme = defaultcolors
